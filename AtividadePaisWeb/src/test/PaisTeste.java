@@ -12,6 +12,7 @@ import model.Pais;
 public class PaisTeste {
 	Pais pais, copia;
 	static int id = 0;
+	PaisDAO dao = new PaisDAO();
 
 	/*
 	 * Antes de rodar este teste, certifique-se que nao ha no banco nenhuma
@@ -27,17 +28,17 @@ public class PaisTeste {
 	@Test
 	public void test00Carregar() {
 		System.out.println("carregar");
-		System.out.println(PaisDAO.carregar(1));
+		System.out.println(dao.carregar(1));
 	}
 	
-	@Test
+	/*@Test
 	public void test01Vetor() {
 		System.out.println("vetor");
 		Pais[] vetor = PaisDAO.vetor3();
 		for (Pais pais : vetor) {
 			System.out.println(pais);
 		}
-	}
+	}*/
 	
 	@Test
 	public void test02OutroVetor() {
@@ -52,7 +53,7 @@ public class PaisTeste {
 	public void test03Carregar() {
 		System.out.println("criar");
 		Pais pais = new Pais(0, "Espanha", 46524943L, 504030.0);
-		PaisDAO.criar(pais);
+		dao.criar(pais);
 	}
 
 	

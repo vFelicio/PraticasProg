@@ -22,7 +22,7 @@ public class PaisDAO {
 	public static Connection obtemConexao() throws SQLException {
 		return DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb?useTimezone=true&serverTimezone=America/Sao_Paulo&user=root&password=bomdesql312");
 	}
-	public static int criar(Pais pais) {
+	public int criar(Pais pais) {
 		String sqlInsert = "INSERT INTO pais(nome, populacao, area) VALUES (?, ?, ?)";
 		// usando o try with resources do Java 7, que fecha o que abriu
 		try (Connection conn = obtemConexao();
@@ -46,21 +46,21 @@ public class PaisDAO {
 		return pais.getIdPais();
 	}
 	
-	public static void atualizar(int idPais, String nomePais, long populacaoPais, double areaPais) {
+	public void atualizar(Pais pais) {
 		String sqlUpdate = "UPDATE pais SET nome=?, populacao=?, area=? WHERE id=?";
 		// usando o try with resources do Java 7, quefecha o queabriu
 		try (Connection conn = obtemConexao();
 				PreparedStatement stm = conn.prepareStatement(sqlUpdate);) {
-			stm.setInt(1, idPais);
-			stm.setString(2, nomePais);
-			stm.setLong(3, populacaoPais);
-			stm.setDouble(4, areaPais);
+			stm.setString(1, pais.getNomePais());
+			stm.setLong(2, pais.getPopulacaoPais());
+			stm.setDouble(3, pais.getAreaPais());
+			stm.setInt(4, pais.getIdPais());
 			stm.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static void excluir(int idPais) {
+	public void excluir(int idPais) {
 		String sqlDelete = "DELETE FROM pais WHERE id = ?";
 		// usando o try with resources do Java 7, quefecha o queabriu
 		try (Connection conn = obtemConexao();
@@ -72,7 +72,7 @@ public class PaisDAO {
 		}
 	}
 	
-	public static Pais carregar(int idPais) {
+	public Pais carregar(int idPais) {
 		Pais pais = null;
 		String sqlSelect = "SELECT nome, populacao, area FROM pais WHERE id = ?";
 		// usando o try with resources do Java 7, quefecha o queabriu
@@ -138,13 +138,13 @@ public class PaisDAO {
 	}
 
 	//criar o vetor de 3 paises
-	public static Pais[] vetor3() {
+	/*public static Pais[] vetor3() {
 		Pais[] vetor = new Pais[3];
 		vetor[0] = carregar(1);
 		vetor[1] = carregar(2);
 		vetor[2] = carregar(3);
 		return vetor;
-	}
+	}*/
 	
 	public static Pais[] outroVetor() {
 		Pais pais = null;
@@ -171,5 +171,57 @@ public class PaisDAO {
 		}
 		return vetor;
 	}
+	
+	public ArrayList<Pais> listarPaises() {
+		Pais pais;
+		ArrayList<Pais> lista = new ArrayList<>();
+		String sqlSelect = "SELECT * FROM pais";
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+			try (ResultSet rs = stm.executeQuery();) {
+				while (rs.next()) {
+					pais = new Pais();
+					pais.setIdPais(rs.getInt("id"));
+					pais.setNomePais(rs.getString("nome"));
+					pais.setPopulacaoPais(rs.getLong("populacao"));
+					pais.setAreaPais(rs.getDouble("area"));
+					lista.add(pais);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e1) {
+			System.out.print(e1.getStackTrace());
+		}
+		return lista;
+	}
+
+	public ArrayList<Pais> listarPaises(String chave) {
+		Pais pais;
+		ArrayList<Pais> lista = new ArrayList<>();
+		String sqlSelect = "SELECT * FROM pais where upper(nome) like ?";
+		// usando o try with resources do Java 7, que fecha o que abriu
+		try (Connection conn = obtemConexao();
+				PreparedStatement stm = conn.prepareStatement(sqlSelect);) {
+			stm.setString(1, "%" + chave.toUpperCase() + "%");
+			try (ResultSet rs = stm.executeQuery();) {
+				while (rs.next()) {
+					pais = new Pais();
+					pais.setIdPais(rs.getInt("id"));
+					pais.setNomePais(rs.getString("nome"));
+					pais.setPopulacaoPais(rs.getLong("populacao"));
+					pais.setAreaPais(rs.getDouble("area"));
+					lista.add(pais);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (SQLException e1) {
+			System.out.print(e1.getStackTrace());
+		}
+		return lista;
+	}
+
 	
 }

@@ -20,11 +20,19 @@ public class PaisService {
 	
 	
 	public int criar(Pais pais) {
-		return PaisDAO.criar(pais);
+		return dao.criar(pais);
 	}
 	
 	public Pais carregar(int id){
-		return PaisDAO.carregar(id);
+		return dao.carregar(id);
 	}
+	
+	public void atualizar(Pais pais){
+		dao.atualizar(pais);
+	}
+	
+	public void excluir(int id){
+		dao.excluir(id);
+		}
 
 }
