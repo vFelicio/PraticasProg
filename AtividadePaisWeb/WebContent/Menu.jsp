@@ -19,7 +19,7 @@
                     </li>
                     <li><a href="#">Estilos</a>
                     </li>
-                    <li><a href="listar_paises.do?acao=reiniciar">Países</a>
+                    <li><a href="controller.do?command=ListarPaisesReiniciar">Países</a>
                     </li>
                 </ul>
             </div>
