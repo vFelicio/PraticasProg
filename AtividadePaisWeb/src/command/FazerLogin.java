@@ -18,10 +18,10 @@ public class FazerLogin implements Command {
 			throws ServletException, IOException {
 		String nome = request.getParameter("username");
 		String senha = request.getParameter("passwd");
-
+     
 		Usuario usuario = new Usuario();
 		usuario.setUsername(nome);
-		
+		// A senha usada para o teste foi "senhacriptografada"
 		Criptografia crypto = new Criptografia();
 		senha = crypto.Criptografar(senha);
 		usuario.setPassword(senha);
